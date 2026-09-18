@@ -46,14 +46,15 @@ public class BurgerTest {
     @Test
     @DisplayName("Проверка добавления ингредиентов")
     public void addIngredientSuccess() {
-        assertEquals(0, burger.ingredients.size(), "Ингредиентов быть не должно");
         burger.addIngredient(firstIngredient);
         burger.addIngredient(secondIngredient);
         Ingredient actualFirstIngredient = burger.ingredients.get(0);
         Ingredient actualSecondIngredient = burger.ingredients.get(1);
-        assertSame(firstIngredient, actualFirstIngredient);
-        assertSame(secondIngredient, actualSecondIngredient);
-        assertEquals(2, burger.ingredients.size(), "Некорректное количество ингредиентов");
+        assertAll(
+                () -> assertSame(firstIngredient, actualFirstIngredient),
+                () -> assertSame(secondIngredient, actualSecondIngredient),
+                () -> assertEquals(2, burger.ingredients.size(), "Некорректное количество ингредиентов")
+        );
     }
 
     @Test
@@ -61,11 +62,12 @@ public class BurgerTest {
     public void removeIngredientSuccess() {
         burger.addIngredient(firstIngredient);
         burger.addIngredient(secondIngredient);
-        assertEquals(2, burger.ingredients.size(), "Ингредиенты не добавлены");
         burger.removeIngredient(0);
         Ingredient actualIngredient = burger.ingredients.get(0);
-        assertEquals(1, burger.ingredients.size(), "Ингредиент не был удален");
-        assertSame(secondIngredient, actualIngredient, "Удален не тот ингредиент");
+        assertAll(
+                () -> assertEquals(1, burger.ingredients.size(), "Ингредиент не был удален"),
+                () -> assertSame(secondIngredient, actualIngredient, "Удален не тот ингредиент")
+        );
     }
 
     @ParameterizedTest(name = "Удаление ингредиента по индексу {0}")
@@ -91,11 +93,17 @@ public class BurgerTest {
 
         assertEquals(2, burger.ingredients.size(), "Количество ингредиентов не должно измениться");
         if (index != newIndex) {
-            assertSame(secondIngredient, burger.ingredients.get(0), "На данной позиции некорректный ингредиент");
-            assertSame(firstIngredient, burger.ingredients.get(1), "На данной позиции некорректный ингредиент");
+            assertAll(
+                    () -> assertSame(secondIngredient, burger.ingredients.get(0), "На данной позиции некорректный ингредиент"),
+                    () -> assertSame(firstIngredient, burger.ingredients.get(1), "На данной позиции некорректный ингредиент")
+            );
+
         } else {
-            assertSame(firstIngredient, burger.ingredients.get(0), "На данной позиции некорректный ингредиент");
-            assertSame(secondIngredient, burger.ingredients.get(1), "На данной позиции некорректный ингредиент");
+            assertAll(
+                    () -> assertSame(firstIngredient, burger.ingredients.get(0), "На данной позиции некорректный ингредиент"),
+                    () -> assertSame(secondIngredient, burger.ingredients.get(1), "На данной позиции некорректный ингредиент")
+            );
+
         }
     }
 
